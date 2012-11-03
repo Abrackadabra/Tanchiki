@@ -1,20 +1,30 @@
 import model.*;
 
 import javax.swing.*;
-import java.applet.Applet;
+import java.applet.*;
 import java.awt.*;
-import java.util.Comparator;
-import java.util.HashMap;
+import java.awt.geom.*;
+import java.util.*;
 
 class Utils {
-    public static boolean checkForObstaclesBetween(Unit a, Unit b, MyWorld myWorld) {
-        // TODO implement
+    public static boolean checkForObstaclesBetween(Unit a, Unit b, MyWorld world) {
+        Line2D.Double line = new Line2D.Double(a.getX(), a.getY(), b.getX(), b.getY());
 
-        return false;
+        boolean result = false;
+
+        for (Unit unit : world.getShellStoppers()) {
+            Point[] points = getPoints(unit);
+            result |= line.intersectsLine(points[0].getX(), points[0].getY(), points[1].getX(), points[1].getY());
+            result |= line.intersectsLine(points[1].getX(), points[1].getY(), points[2].getX(), points[2].getY());
+            result |= line.intersectsLine(points[2].getX(), points[2].getY(), points[3].getX(), points[3].getY());
+            result |= line.intersectsLine(points[3].getX(), points[3].getY(), points[0].getX(), points[0].getY());
+        }
+
+        return result;
     }
 
     public static class DistanceComparator implements Comparator<Unit> {
-        Unit center;
+        private Unit center;
 
         public DistanceComparator(Unit center) {
             this.center = center;
@@ -33,7 +43,7 @@ class Utils {
     }
 
     public static class AbsoluteAngleComparator implements Comparator<Unit> {
-        Unit center;
+        private Unit center;
 
         public AbsoluteAngleComparator(Unit center) {
             this.center = center;
@@ -52,7 +62,7 @@ class Utils {
     }
 
     public static class AbsoluteTurretAngleComparator implements Comparator<Unit> {
-        Tank center;
+        private Tank center;
 
         public AbsoluteTurretAngleComparator(Tank center) {
             this.center = center;
@@ -64,29 +74,6 @@ class Utils {
             double d2 = Math.abs(center.getTurretAngleTo(o2));
             if (d1 != d2) {
                 return d1 < d2 ? -1 : 1;
-            }
-            if (o1.getId() == o2.getId()) return 0;
-            return o1.getId() < o2.getId() ? -1 : 1;
-        }
-    }
-
-    public static class ScoreComparator implements Comparator<Tank> {
-        HashMap<String, Integer> scores;
-
-        public ScoreComparator(HashMap<String, Integer> scores) {
-            this.scores = scores;
-        }
-
-        @Override
-        public int compare(Tank o1, Tank o2) {
-            int s1 = 0;
-            if (scores.containsKey(o1.getPlayerName()))
-                s1 = scores.get(o1.getPlayerName());
-            int s2 = 0;
-            if (scores.containsKey(o2.getPlayerName()))
-                s2 = scores.get(o2.getPlayerName());
-            if (s1 != s2) {
-                return s1 < s2 ? 1 : -1;
             }
             if (o1.getId() == o2.getId()) return 0;
             return o1.getId() < o2.getId() ? -1 : 1;
@@ -157,15 +144,32 @@ class Utils {
     }
 
     public static void invokeApplet(Applet applet) {
-        JFrame app = new JFrame("Applet Container");
-        app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        app.setSize(1280, 800);
+        JFrame jFrame = new JFrame("Applet Container");
+        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jFrame.setSize(1280, 800);
 
         applet.init();
 
-        app.setLayout(new BorderLayout());
-        // include it as a component.  local testing can now start
-        app.getContentPane().add(applet, BorderLayout.CENTER);
-        app.setVisible(true);
+        jFrame.setLayout(new BorderLayout());
+        jFrame.getContentPane().add(applet, BorderLayout.CENTER);
+        jFrame.setVisible(true);
+    }
+
+    public static Point[] getPoints(Unit unit) {
+        double l = Math.hypot(unit.getWidth() / 2, unit.getHeight() / 2);
+        double angle = Math.asin(unit.getWidth() / 2 / l);
+        Point[] result = new Point[4];
+        double a;
+
+        a = unit.getAngle() + angle;
+        result[0] = new Point(unit.getX() + l * Math.cos(a), unit.getY() + l * Math.sin(a));
+        a = unit.getAngle() + Math.PI - angle;
+        result[1] = new Point(unit.getX() + l * Math.cos(a), unit.getY() + l * Math.sin(a));
+        a = unit.getAngle() - Math.PI + angle;
+        result[2] = new Point(unit.getX() + l * Math.cos(a), unit.getY() + l * Math.sin(a));
+        a = unit.getAngle() - angle;
+        result[3] = new Point(unit.getX() + l * Math.cos(a), unit.getY() + l * Math.sin(a));
+
+        return result;
     }
 }

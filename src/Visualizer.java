@@ -36,7 +36,7 @@ public class Visualizer extends Applet {
 
     void draw(Graphics graphics) {
         graphics.setColor(Color.BLACK);
-        for (Tank tank : commander.getMyWorld().getTanks()) {
+        for (Tank tank : commander.getWorld().getTanks()) {
             int x1 = (int) Math.round(tank.getX());
             int y1 = (int) Math.round(tank.getY());
             int r = (int) tank.getWidth() / 2;
@@ -60,7 +60,7 @@ public class Visualizer extends Applet {
             }
         }
 
-        for (Shell shell : commander.getMyWorld().getShells()) {
+        for (Shell shell : commander.getWorld().getShells()) {
             int x1 = (int) Math.round(shell.getX());
             int y1 = (int) Math.round(shell.getY());
 
@@ -69,7 +69,7 @@ public class Visualizer extends Applet {
             graphics.fillOval(x1 - r, y1 - r, r * 2, r * 2);
         }
 
-        for (Bonus bonus : commander.getMyWorld().getBonuses()) {
+        for (Bonus bonus : commander.getWorld().getBonuses()) {
             int x1 = (int) Math.round(bonus.getX());
             int y1 = (int) Math.round(bonus.getY());
 

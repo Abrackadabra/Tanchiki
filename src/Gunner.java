@@ -14,7 +14,7 @@ public class Gunner {
 
     void act() {
         this.self = commander.getSelf();
-        this.myWorld = commander.getMyWorld();
+        this.myWorld = commander.getWorld();
         this.move = commander.getMove();
 
         findTarget();

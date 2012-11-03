@@ -6,12 +6,12 @@ public class Commander {
     private Irina irina;
 
     private Tank self;
-    private MyWorld myWorld;
+    private MyWorld world;
     private Move move;
 
-    public void act(Tank self, MyWorld myWorld, Move move) {
+    public void act(Tank self, MyWorld world, Move move) {
         this.self = self;
-        this.myWorld = myWorld;
+        this.world = world;
         this.move = move;
 
         if (gunner == null) gunner = new Gunner(this);
@@ -40,8 +40,8 @@ public class Commander {
         return self;
     }
 
-    public MyWorld getMyWorld() {
-        return myWorld;
+    public MyWorld getWorld() {
+        return world;
     }
 
     public Move getMove() {

@@ -8,12 +8,13 @@ public class Irina {
     private final Point[][] points;
     private ArrayList<Point> allPoints = new ArrayList<Point>();
     private final Commander commander;
-    private MyWorld myWorld;
+
+    private MyWorld world;
 
     public Irina(Commander commander) {
         this.commander = commander;
-        n = (int) commander.getMyWorld().getHeight() / Constants.tileSize;
-        m = (int) commander.getMyWorld().getWidth() / Constants.tileSize;
+        n = (int) commander.getWorld().getHeight() / Constants.tileSize;
+        m = (int) commander.getWorld().getWidth() / Constants.tileSize;
         points = new Point[n][m];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
@@ -30,14 +31,14 @@ public class Irina {
             }
         }
 
-        for (Shell shell : commander.getMyWorld().getShells()) {
+        for (Shell shell : commander.getWorld().getShells()) {
             for (Point point : allPoints) {
 
             }
         }
     }
 
-    Point bestPoint = new Point(0, 0);
+    Point target = new Point(0, 0);
 
     public void draw(Graphics graphics) {
         for (Point point : allPoints) {
@@ -55,11 +56,14 @@ public class Irina {
             graphics.setColor(Color.BLACK);
         }
 
-        Point simplePoint = bestPoint;
         graphics.setColor(Color.RED);
-        int x = (int) simplePoint.getX();
-        int y = (int) simplePoint.getY();
+        int x = (int) target.getX();
+        int y = (int) target.getY();
         graphics.drawLine(x - 100, y, x + 100, y);
         graphics.drawLine(x, y - 100, x, y + 100);
+    }
+
+    public Point getTarget() {
+        return target;
     }
 }

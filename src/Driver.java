@@ -1,26 +1,24 @@
 import model.*;
 
 public class Driver {
-    Tank self;
-    MyWorld myWorld;
-    Move move;
+    private Tank self;
+    private MyWorld world;
+    private Move move;
 
-    Unit target;
-
-    final Commander commander;
+    private final Commander commander;
 
     public Driver(Commander commander) {
         this.commander = commander;
     }
 
-    void act() {
+    public void act() {
         this.self = commander.getSelf();
-        this.myWorld = commander.getMyWorld();
+        this.world = commander.getWorld();
         this.move = commander.getMove();
 
-        findTarget();
+        Point target = commander.getIrina().getTarget();
 
-        if (target != null && !Utils.isBlocked(self, myWorld)) {
+        if (target != null && !Utils.isBlocked(self, world)) {
             double angle = self.getAngleTo(target);
             if (Math.abs(angle) < Math.PI / 2) {
                 double leftPower = 1.0;
@@ -56,9 +54,5 @@ public class Driver {
             move.setLeftTrackPower(-0.5);
             move.setRightTrackPower(-0.5);
         }
-    }
-
-    void findTarget() {
-        target = null;
     }
 }
