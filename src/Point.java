@@ -1,5 +1,7 @@
 import model.*;
 
+import java.awt.geom.*;
+
 public class Point extends Unit {
     private double priority = Constants.defaultPriority;
 
@@ -8,7 +10,7 @@ public class Point extends Unit {
     }
 
     public Point(double x, double y) {
-        super(-1, 0, 0, x, y, 0, 0, 0, 0);
+        super(-1L, 0.0, 0.0, x, y, 0.0, 0.0, 0.0, 0.0);
     }
 
     public double getPriority() {
@@ -16,6 +18,10 @@ public class Point extends Unit {
     }
 
     public void setPriority(double priority) {
-        this.priority = Math.max(0, Math.min(1, priority));
+        this.priority = Math.max(0.0, Math.min(1.0, priority));
+    }
+
+    public Point2D.Double getPoint2D() {
+        return new Point2D.Double(getX(), getY());
     }
 }

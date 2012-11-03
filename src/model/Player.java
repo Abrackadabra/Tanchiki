@@ -4,8 +4,8 @@ package model;
  * Содержит данные о текущем состоянии игрока.
  */
 public final class Player {
-    private final String name;
-    private final int score;
+    private final String  name;
+    private final int     score;
     private final boolean strategyCrashed;
 
     public Player(String name, int score, boolean strategyCrashed) {

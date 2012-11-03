@@ -1,38 +1,41 @@
 import model.*;
 
 public class Gunner {
-    Tank self;
-    MyWorld myWorld;
-    Move move;
-    final Commander commander;
-
-    Tank target;
+    private       Tank      self;
+    private       MyWorld   myWorld;
+    private       Move      move;
+    private final Commander commander;
 
     public Gunner(Commander commander) {
         this.commander = commander;
     }
 
-    void act() {
-        this.self = commander.getSelf();
-        this.myWorld = commander.getWorld();
-        this.move = commander.getMove();
+    public void act() {
+        self = commander.getSelf();
+        myWorld = commander.getWorld();
+        move = commander.getMove();
 
-        findTarget();
+        fireAtWill(findTarget());
         double angle;
         if (target != null) {
             angle = self.getTurretAngleTo(target);
-            if (Math.abs(angle) < Constants.dangerousAngle)
+            if (Math.abs(angle) < Constants.dangerousAngle) {
                 move.setFireType(FireType.PREMIUM_PREFERRED);
-            else
+            } else {
                 move.setFireType(FireType.NONE);
+            }
         } else {
             angle = -self.getTurretRelativeAngle();
             move.setFireType(FireType.NONE);
         }
-        move.setTurretTurn(angle * 10);
+        move.setTurretTurn(angle * 10.0);
     }
 
-    void findTarget() {
+    private Unit target;
+
+    private Unit findTarget() {
+        target = null;
+        return null;
         // TODO implement
         /*
         int n = myWorld.getEnemies().length;
@@ -70,7 +73,11 @@ public class Gunner {
         }         */
     }
 
-    public Tank getTarget() {
+    private void fireAtWill(Unit target) {
+
+    }
+
+    public Unit getTarget() {
         return target;
     }
 }

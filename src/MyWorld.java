@@ -1,22 +1,21 @@
 import model.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 
-public final class MyWorld {
-    private final int tick;
+public class MyWorld {
+    private final int    tick;
     private final double width;
     private final double height;
-    private ArrayList<Player> players = new ArrayList<Player>();
-    private ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
-    private ArrayList<Tank> tanks = new ArrayList<Tank>();
-    private ArrayList<Shell> shells = new ArrayList<Shell>();
-    private ArrayList<Bonus> bonuses = new ArrayList<Bonus>();
+    private final ArrayList<Player>   players   = new ArrayList<Player>();
+    private final ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
+    private final ArrayList<Tank>     tanks     = new ArrayList<Tank>();
+    private final ArrayList<Shell>    shells    = new ArrayList<Shell>();
+    private final ArrayList<Bonus>    bonuses   = new ArrayList<Bonus>();
 
     public MyWorld(World world) {
-        this.tick = world.getTick();
-        this.width = world.getWidth();
-        this.height = world.getHeight();
+        tick = world.getTick();
+        width = world.getWidth();
+        height = world.getHeight();
         Collections.addAll(players, world.getPlayers());
         Collections.addAll(obstacles, world.getObstacles());
         Collections.addAll(tanks, world.getTanks());
@@ -57,6 +56,7 @@ public final class MyWorld {
     }
 
     private ArrayList<Tank> corpses;
+
     public ArrayList<Tank> getCorpses() {
         if (corpses == null) {
             corpses = new ArrayList<Tank>();
@@ -70,6 +70,7 @@ public final class MyWorld {
     }
 
     private ArrayList<Tank> survivors;
+
     public ArrayList<Tank> getSurvivors() {
         if (survivors == null) {
             survivors = new ArrayList<Tank>();
@@ -83,8 +84,10 @@ public final class MyWorld {
     }
 
     private ArrayList<Tank> enemies;
+
     public ArrayList<Tank> getEnemies() {
         if (enemies == null) {
+            enemies = new ArrayList<Tank>();
             for (Tank tank : getSurvivors()) {
                 if (!tank.isTeammate()) {
                     enemies.add(tank);
@@ -95,6 +98,7 @@ public final class MyWorld {
     }
 
     private ArrayList<Unit> shellStoppers;
+
     public ArrayList<Unit> getShellStoppers() {
         if (shellStoppers == null) {
             shellStoppers = new ArrayList<Unit>();

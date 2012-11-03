@@ -7,22 +7,18 @@ import static java.lang.StrictMath.atan2;
  * Класс, определяющий танк. Содержит также все свойства юнита.
  */
 public final class Tank extends Unit {
-    private final String playerName;
-    private final int teammateIndex;
-    private final double turretRelativeAngle;
-    private final int crewHealth;
-    private final int hullDurability;
-    private final int reloadingTime;
-    private final int remainingReloadingTime;
-    private final int premiumShellCount;
-    private final boolean teammate;
+    private final String   playerName;
+    private final int      teammateIndex;
+    private final double   turretRelativeAngle;
+    private final int      crewHealth;
+    private final int      hullDurability;
+    private final int      reloadingTime;
+    private final int      remainingReloadingTime;
+    private final int      premiumShellCount;
+    private final boolean  teammate;
     private final TankType type;
 
-    public Tank(
-            long id, String playerName, int teammateIndex,
-            double x, double y, double speedX, double speedY, double angle, double angularSpeed,
-            double turretRelativeAngle, int crewHealth, int hullDurability,
-            int reloadingTime, int remainingReloadingTime, int premiumShellCount, boolean teammate, TankType type) {
+    public Tank(long id, String playerName, int teammateIndex, double x, double y, double speedX, double speedY, double angle, double angularSpeed, double turretRelativeAngle, int crewHealth, int hullDurability, int reloadingTime, int remainingReloadingTime, int premiumShellCount, boolean teammate, TankType type) {
         super(id, type.getWidth(), type.getHeight(), x, y, speedX, speedY, angle, angularSpeed);
 
         this.playerName = playerName;

@@ -19,10 +19,7 @@ public enum TankType {
     /**
      * Самоходное противотанковое орудие, ПТ.
      */
-    TANK_DESTROYER(
-            112.5D, 67.5D, 97.5D, 15.0D, 5000.0D, 0.35D,
-            1.5D * PI / 180.0D, 15.0D * PI / 180.0D, 100, 250, 250, 125, 100
-    );
+    TANK_DESTROYER(112.5D, 67.5D, 97.5D, 15.0D, 5000.0D, 0.35D, 1.5D * PI / 180.0D, 15.0D * PI / 180.0D, 100, 250, 250, 125, 100);
 
     private final double width;
     private final double height;
@@ -32,17 +29,13 @@ public enum TankType {
     private final double engineRearPowerFactor;
     private final double turretTurnSpeed;
     private final double turretMaxRelativeAngle;
-    private final int crewMaxHealth;
-    private final int hullMaxDurability;
-    private final int frontalArmor;
-    private final int sideArmor;
-    private final int rearArmor;
+    private final int    crewMaxHealth;
+    private final int    hullMaxDurability;
+    private final int    frontalArmor;
+    private final int    sideArmor;
+    private final int    rearArmor;
 
-    TankType(
-            double width, double height, double virtualGunLength,
-            double mass, double enginePower, double engineRearPowerFactor,
-            double turretTurnSpeed, double turretMaxRelativeAngle, int crewMaxHealth, int hullMaxDurability,
-            int frontalArmor, int sideArmor, int rearArmor) {
+    TankType(double width, double height, double virtualGunLength, double mass, double enginePower, double engineRearPowerFactor, double turretTurnSpeed, double turretMaxRelativeAngle, int crewMaxHealth, int hullMaxDurability, int frontalArmor, int sideArmor, int rearArmor) {
         this.width = width;
         this.height = height;
         this.virtualGunLength = virtualGunLength;

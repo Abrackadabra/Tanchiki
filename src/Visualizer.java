@@ -6,10 +6,11 @@ import java.awt.*;
 import java.awt.image.*;
 
 public class Visualizer extends Applet {
-    private double width = 1280;
-    private double height = 800;
+    private final double        width         = 1280.0;
+    private final double        height        = 800.0;
     private BufferedImage bufferedImage = new BufferedImage((int) width, (int) height, BufferedImage.TYPE_INT_ARGB);
 
+    @Override
     public void init() {
         setSize((int) width, (int) height);
     }
@@ -21,6 +22,7 @@ public class Visualizer extends Applet {
         repaint();
     }
 
+    @Override
     public void paint(Graphics graphics) {
         if (commander != null) {
             bufferedImage.getGraphics().setColor(Color.WHITE);
@@ -30,6 +32,7 @@ public class Visualizer extends Applet {
         }
     }
 
+    @Override
     public void update(Graphics graphics) {
         paint(graphics);
     }
@@ -45,8 +48,8 @@ public class Visualizer extends Applet {
             int x2 = (int) Math.round(tank.getX() + Math.cos(turretAngle) * tank.getVirtualGunLength());
             int y2 = (int) Math.round(tank.getY() + Math.sin(turretAngle) * tank.getVirtualGunLength());
             graphics.drawLine(x1, y1, x2, y2);
-            x2 = (int) Math.round(tank.getX() + Math.cos(tank.getAngle()) * r);
-            y2 = (int) Math.round(tank.getY() + Math.sin(tank.getAngle()) * r);
+            x2 = (int) Math.round(tank.getX() + Math.cos(tank.getAngle()) * (double) r);
+            y2 = (int) Math.round(tank.getY() + Math.sin(tank.getAngle()) * (double) r);
             graphics.drawLine(x1, y1, x2, y2);
 
             if (tank.getId() == commander.getSelf().getId()) {
@@ -64,7 +67,7 @@ public class Visualizer extends Applet {
             int x1 = (int) Math.round(shell.getX());
             int y1 = (int) Math.round(shell.getY());
 
-            int r = ((int) (Math.min(shell.getWidth(), shell.getHeight()) / 2));
+            int r = (int) (Math.min(shell.getWidth(), shell.getHeight()) / 2.0);
 
             graphics.fillOval(x1 - r, y1 - r, r * 2, r * 2);
         }
@@ -73,14 +76,17 @@ public class Visualizer extends Applet {
             int x1 = (int) Math.round(bonus.getX());
             int y1 = (int) Math.round(bonus.getY());
 
-            if (bonus.getType() == BonusType.MEDIKIT)
+            if (bonus.getType() == BonusType.MEDIKIT) {
                 graphics.setColor(Color.RED);
-            if (bonus.getType() == BonusType.REPAIR_KIT)
+            }
+            if (bonus.getType() == BonusType.REPAIR_KIT) {
                 graphics.setColor(Color.BLUE);
-            if (bonus.getType() == BonusType.AMMO_CRATE)
+            }
+            if (bonus.getType() == BonusType.AMMO_CRATE) {
                 graphics.setColor(Color.YELLOW);
+            }
 
-            int r = ((int) (Math.min(bonus.getWidth(), bonus.getHeight()) / 2));
+            int r = (int) (Math.min(bonus.getWidth(), bonus.getHeight()) / 2.0);
 
             graphics.fillRect(x1 - r, y1 - r, 2 * r, 2 * r);
 

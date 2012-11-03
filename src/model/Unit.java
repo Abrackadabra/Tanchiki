@@ -6,7 +6,7 @@ import static java.lang.StrictMath.*;
  * Базовый класс для определения объектов (<<юнитов>>) на игровом поле.
  */
 public abstract class Unit {
-    private final long id;
+    private final long   id;
     private final double width;
     private final double height;
     private final double x;
@@ -16,9 +16,7 @@ public abstract class Unit {
     private final double angle;
     private final double angularSpeed;
 
-    protected Unit(
-            long id, double width, double height, double x, double y,
-            double speedX, double speedY, double angle, double angularSpeed) {
+    protected Unit(long id, double width, double height, double x, double y, double speedX, double speedY, double angle, double angularSpeed) {
         this.id = id;
         this.width = width;
         this.height = height;

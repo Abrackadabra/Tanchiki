@@ -7,17 +7,16 @@ import java.util.Arrays;
  */
 @Deprecated
 public final class World {
-    private final int tick;
-    private final double width;
-    private final double height;
-    private final Player[] players;
+    private final int        tick;
+    private final double     width;
+    private final double     height;
+    private final Player[]   players;
     private final Obstacle[] obstacles;
-    private final Tank[] tanks;
-    private final Shell[] shells;
-    private final Bonus[] bonuses;
+    private final Tank[]     tanks;
+    private final Shell[]    shells;
+    private final Bonus[]    bonuses;
 
-    public World(int tick, double width, double height, Player[] players,
-                 Obstacle[] obstacles, Tank[] tanks, Shell[] shells, Bonus[] bonuses) {
+    public World(int tick, double width, double height, Player[] players, Obstacle[] obstacles, Tank[] tanks, Shell[] shells, Bonus[] bonuses) {
         this.tick = tick;
         this.width = width;
         this.height = height;

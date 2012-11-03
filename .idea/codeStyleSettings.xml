@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectCodeStyleSettingsManager">
+    <option name="PER_PROJECT_SETTINGS">
+      <value>
+        <option name="PACKAGES_TO_USE_IMPORT_ON_DEMAND">
+          <value>
+            <package name="java.awt" withSubpackages="false" static="false" />
+            <package name="java.util" withSubpackages="false" static="false" />
+            <package name="java.math" withSubpackages="false" static="false" />
+            <package name="java.io" withSubpackages="true" static="false" />
+            <package name="javax.swing" withSubpackages="false" static="false" />
+          </value>
+        </option>
+        <codeStyleSettings language="JAVA">
+          <option name="ELSE_ON_NEW_LINE" value="true" />
+          <option name="ALIGN_MULTILINE_CHAINED_METHODS" value="true" />
+          <option name="ALIGN_MULTILINE_PARAMETERS_IN_CALLS" value="true" />
+          <option name="ALIGN_MULTILINE_BINARY_OPERATION" value="true" />
+          <option name="ALIGN_MULTILINE_ASSIGNMENT" value="true" />
+          <option name="ALIGN_MULTILINE_TERNARY_OPERATION" value="true" />
+          <option name="ALIGN_MULTILINE_METHOD_BRACKETS" value="true" />
+          <option name="ALIGN_MULTILINE_PARENTHESIZED_EXPRESSION" value="true" />
+          <option name="ALIGN_MULTILINE_ARRAY_INITIALIZER_EXPRESSION" value="true" />
+          <option name="ALIGN_GROUP_FIELD_DECLARATIONS" value="true" />
+          <option name="SPACE_BEFORE_ARRAY_INITIALIZER_LBRACE" value="true" />
+          <option name="BINARY_OPERATION_SIGN_ON_NEXT_LINE" value="true" />
+          <option name="KEEP_SIMPLE_BLOCKS_IN_ONE_LINE" value="true" />
+          <option name="KEEP_SIMPLE_METHODS_IN_ONE_LINE" value="true" />
+          <option name="KEEP_SIMPLE_CLASSES_IN_ONE_LINE" value="true" />
+          <option name="IF_BRACE_FORCE" value="1" />
+          <option name="DOWHILE_BRACE_FORCE" value="1" />
+          <option name="WHILE_BRACE_FORCE" value="1" />
+          <option name="FOR_BRACE_FORCE" value="1" />
+          <indentOptions>
+            <option name="USE_RELATIVE_INDENTS" value="true" />
+          </indentOptions>
+        </codeStyleSettings>
+      </value>
+    </option>
+  </component>
+</project>
+

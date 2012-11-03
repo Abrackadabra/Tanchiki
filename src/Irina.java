@@ -13,12 +13,12 @@ public class Irina {
 
     public Irina(Commander commander) {
         this.commander = commander;
-        n = (int) commander.getWorld().getHeight() / Constants.tileSize;
-        m = (int) commander.getWorld().getWidth() / Constants.tileSize;
+        n = (int) (commander.getWorld().getHeight() / Constants.tileSize);
+        m = (int) (commander.getWorld().getWidth() / Constants.tileSize);
         points = new Point[n][m];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
-                points[i][j] = new Point((j + 0.5) * Constants.tileSize, (i + 0.5) * Constants.tileSize);
+                points[i][j] = new Point(((double) j + 0.5) * Constants.tileSize, ((double) i + 0.5) * Constants.tileSize);
                 allPoints.add(points[i][j]);
             }
         }
@@ -38,15 +38,15 @@ public class Irina {
         }
     }
 
-    Point target = new Point(0, 0);
+    private Point target = new Point(0.0, 0.0);
 
     public void draw(Graphics graphics) {
         for (Point point : allPoints) {
             double value = point.getPriority();
-            int x = (int) (point.getX());
-            int y = (int) (point.getY());
+            int x = (int) point.getX();
+            int y = (int) point.getY();
 
-            Color color = Color.getHSBColor(0.33f, (float) (value), 1f);
+            Color color = Color.getHSBColor(0.33f, (float) value, 1.0f);
             graphics.setColor(color);
 
             int r = 3;

@@ -7,14 +7,14 @@ import java.nio.ByteOrder;
 
 @Deprecated
 public final class RemoteProcessClient implements Closeable {
-    private static final int BUFFER_SIZE_BYTES = 1 << 20;
+    private static final int       BUFFER_SIZE_BYTES   = 1 << 20;
     private static final ByteOrder PROTOCOL_BYTE_ORDER = ByteOrder.LITTLE_ENDIAN;
-    private static final int INTEGER_SIZE_BYTES = Integer.SIZE / Byte.SIZE;
-    private static final int LONG_SIZE_BYTES = Long.SIZE / Byte.SIZE;
+    private static final int       INTEGER_SIZE_BYTES  = Integer.SIZE / Byte.SIZE;
+    private static final int       LONG_SIZE_BYTES     = Long.SIZE / Byte.SIZE;
 
-    private final Socket socket;
-    private final InputStream inputStream;
-    private final OutputStream outputStream;
+    private final Socket                socket;
+    private final InputStream           inputStream;
+    private final OutputStream          outputStream;
     private final ByteArrayOutputStream outputStreamBuffer;
 
     public RemoteProcessClient(String host, int port) throws IOException {
@@ -103,10 +103,7 @@ public final class RemoteProcessClient implements Closeable {
             return null;
         }
 
-        return new World(
-                readInt(), readDouble(), readDouble(),
-                readPlayers(), readObstacles(), readTanks(), readShells(), readBonuses()
-        );
+        return new World(readInt(), readDouble(), readDouble(), readPlayers(), readObstacles(), readTanks(), readShells(), readBonuses());
     }
 
     private Player[] readPlayers() throws IOException {
@@ -136,9 +133,7 @@ public final class RemoteProcessClient implements Closeable {
 
         for (int obstacleIndex = 0; obstacleIndex < obstacleCount; ++obstacleIndex) {
             if (readBoolean()) {
-                obstacles[obstacleIndex] = new Obstacle(
-                        readLong(), readDouble(), readDouble(), readDouble(), readDouble()
-                );
+                obstacles[obstacleIndex] = new Obstacle(readLong(), readDouble(), readDouble(), readDouble(), readDouble());
             }
         }
 
@@ -155,12 +150,7 @@ public final class RemoteProcessClient implements Closeable {
 
         for (int tankIndex = 0; tankIndex < tankCount; ++tankIndex) {
             if (readBoolean()) {
-                tanks[tankIndex] = new Tank(
-                        readLong(), readString(), readInt(), readDouble(), readDouble(),
-                        readDouble(), readDouble(), readDouble(), readDouble(), readDouble(),
-                        readInt(), readInt(), readInt(), readInt(), readInt(),
-                        readBoolean(), readEnum(TankType.class)
-                );
+                tanks[tankIndex] = new Tank(readLong(), readString(), readInt(), readDouble(), readDouble(), readDouble(), readDouble(), readDouble(), readDouble(), readDouble(), readInt(), readInt(), readInt(), readInt(), readInt(), readBoolean(), readEnum(TankType.class));
             }
         }
 
@@ -177,10 +167,7 @@ public final class RemoteProcessClient implements Closeable {
 
         for (int shellIndex = 0; shellIndex < shellCount; ++shellIndex) {
             if (readBoolean()) {
-                shells[shellIndex] = new Shell(
-                        readLong(), readString(), readDouble(), readDouble(), readDouble(), readDouble(),
-                        readDouble(), readDouble(), readDouble(), readDouble(), readEnum(ShellType.class)
-                );
+                shells[shellIndex] = new Shell(readLong(), readString(), readDouble(), readDouble(), readDouble(), readDouble(), readDouble(), readDouble(), readDouble(), readDouble(), readEnum(ShellType.class));
             }
         }
 
@@ -197,9 +184,7 @@ public final class RemoteProcessClient implements Closeable {
 
         for (int bonusIndex = 0; bonusIndex < bonusCount; ++bonusIndex) {
             if (readBoolean()) {
-                bonuses[bonusIndex] = new Bonus(
-                        readLong(), readDouble(), readDouble(), readDouble(), readDouble(), readEnum(BonusType.class)
-                );
+                bonuses[bonusIndex] = new Bonus(readLong(), readDouble(), readDouble(), readDouble(), readDouble(), readEnum(BonusType.class));
             }
         }
 
@@ -208,9 +193,7 @@ public final class RemoteProcessClient implements Closeable {
 
     private static void ensureMessageType(MessageType actualType, MessageType expectedType) {
         if (actualType != expectedType) {
-            throw new IllegalArgumentException(String.format(
-                    "Received wrong message [actual=%s, expected=%s].", actualType, expectedType
-            ));
+            throw new IllegalArgumentException(String.format("Received wrong message [actual=%s, expected=%s].", actualType, expectedType));
         }
     }
 
@@ -231,7 +214,7 @@ public final class RemoteProcessClient implements Closeable {
     }
 
     private <E extends Enum> void writeEnum(E value) throws IOException {
-        writeBytes(new byte[]{(byte) (value == null ? -1 : value.ordinal())});
+        writeBytes(new byte[] {(byte) (value == null ? -1 : value.ordinal())});
     }
 
     private String readString() throws IOException {
@@ -269,7 +252,7 @@ public final class RemoteProcessClient implements Closeable {
     }
 
     private void writeBoolean(boolean value) throws IOException {
-        writeBytes(new byte[]{(byte) (value ? 1 : 0)});
+        writeBytes(new byte[] {(byte) (value ? 1 : 0)});
     }
 
     private int readInt() throws IOException {

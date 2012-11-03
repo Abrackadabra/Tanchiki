@@ -7,13 +7,13 @@ import java.io.IOException;
 
 public final class Runner {
     private final RemoteProcessClient remoteProcessClient;
-    private final String token;
+    private final String              token;
 
     public static void main(String[] args) throws IOException {
         if (args.length == 3) {
             new Runner(args).run();
         } else {
-            new Runner(new String[]{"localhost", "31000", "0000000000000000"}).run();
+            new Runner(new String[] {"localhost", "31000", "0000000000000000"}).run();
         }
     }
 
