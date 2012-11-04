@@ -5,43 +5,77 @@ import java.util.*;
 
 public class Irina {
     private final int n, m;
-    private final Point[][] points;
-    private ArrayList<Point> allPoints = new ArrayList<Point>();
+    private final ArrayList<Point> points = new ArrayList<Point>();
     private final Commander commander;
 
+    private Tank    self;
     private MyWorld world;
+
 
     public Irina(Commander commander) {
         this.commander = commander;
-        n = (int) (commander.getWorld().getHeight() / Constants.tileSize);
-        m = (int) (commander.getWorld().getWidth() / Constants.tileSize);
-        points = new Point[n][m];
+        n = (int) (commander.getWorld().getHeight() / Constants.TILE_SIZE);
+        m = (int) (commander.getWorld().getWidth() / Constants.TILE_SIZE);
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
-                points[i][j] = new Point(((double) j + 0.5) * Constants.tileSize, ((double) i + 0.5) * Constants.tileSize);
-                allPoints.add(points[i][j]);
+                points.add(new Point((j + 0.5) * Constants.TILE_SIZE, (i + 0.5) * Constants.TILE_SIZE));
             }
         }
     }
 
-    public void update() {
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                points[i][j].clear();
+    private Point target;
+
+    public void act() {
+        Collections.shuffle(points);
+        long start = System.nanoTime();
+
+        world = commander.getWorld();
+        self = commander.getSelf();
+
+        target = null;
+        double max = 0.0;
+        for (Point point : points) {
+            point.setPriority(evaluatePoint(point));
+            if (point.getPriority() > max) {
+                max = point.getPriority();
+                target = point;
             }
         }
 
-        for (Shell shell : commander.getWorld().getShells()) {
-            for (Point point : allPoints) {
-
-            }
-        }
+        long total = System.nanoTime() - start;
+        System.out.println(total / 1e9);
     }
 
-    private Point target = new Point(0.0, 0.0);
+    private double evaluatePoint(Point point) {
+        double value = 0.3;
+
+        for (Bonus bonus : world.getBonuses()) {
+            if (Utils.checkIntersection(point, bonus)) {
+                if (bonus.getType() == BonusType.MEDIKIT) {
+                    value = 1.0;
+                }
+                if (bonus.getType() == BonusType.AMMO_CRATE) {
+                    value = 0.8;
+                }
+                if (bonus.getType() == BonusType.REPAIR_KIT) {
+                    value = 0.6;
+                }
+            }
+        }
+
+        value -= (self.getDistanceTo(point) / Math.hypot(world.getWidth(), world.getHeight()) + Math.abs(self.getAngleTo(point)) / Math.PI) / 2.0 * 0.3;
+
+        double sum = 0.0;
+        for (Tank tank : world.getEnemies()) {
+            sum += tank.getDistanceTo(point) / Math.hypot(world.getWidth(), world.getHeight()) / 5.0;
+        }
+        value -= Math.min(0.5, sum);
+
+        return Math.min(1.0, Math.max(0.0, value));
+    }
 
     public void draw(Graphics graphics) {
-        for (Point point : allPoints) {
+        for (Point point : points) {
             double value = point.getPriority();
             int x = (int) point.getX();
             int y = (int) point.getY();

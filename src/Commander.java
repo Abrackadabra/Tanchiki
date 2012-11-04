@@ -24,7 +24,7 @@ public class Commander {
             irina = new Irina(this);
         }
 
-        irina.update();
+        irina.act();
 
         gunner.act();
         driver.act();

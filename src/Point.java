@@ -3,18 +3,14 @@ import model.*;
 import java.awt.geom.*;
 
 public class Point extends Unit {
-    private double priority = Constants.defaultPriority;
+    private double priority = Constants.DEFAULT_PRIORITY;
 
     public void clear() {
-        priority = Constants.defaultPriority;
+        priority = Constants.DEFAULT_PRIORITY;
     }
 
     public Point(double x, double y) {
         super(-1L, 0.0, 0.0, x, y, 0.0, 0.0, 0.0, 0.0);
-    }
-
-    public Point(double x, double y, long id) {
-        super(id, 0.0, 0.0, x, y, 0.0, 0.0, 0.0, 0.0);
     }
 
     public double getPriority() {

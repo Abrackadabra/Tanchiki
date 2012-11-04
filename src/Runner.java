@@ -58,6 +58,11 @@ public final class Runner {
                     visualizers[strategyIndex].redraw(strategies[strategyIndex].getCommander());
                 }
 
+                try {
+                    //Thread.sleep(100);
+                } catch (Exception e) {
+                }
+
                 remoteProcessClient.writeMoves(moves);
             }
         } finally {

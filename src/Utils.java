@@ -13,7 +13,9 @@ class Utils {
         Line2D line = new Line2D.Double(a.getX(), a.getY(), b.getX(), b.getY());
 
         for (Unit unit : world.getShellStoppers()) {
-            if (unit.getId() == a.getId() || unit.getId() == b.getId()) continue;
+            if (unit.getId() == a.getId() || unit.getId() == b.getId()) {
+                continue;
+            }
             for (Line2D line2D : getBoundingLines(unit)) {
                 if (line.intersectsLine(line2D)) {
                     return true;
@@ -26,12 +28,14 @@ class Utils {
 
     public static Line2D[] getBoundingLines(Unit unit) {
         Point[] points = getPoints(unit);
-        Line2D[] result = new Line2D[4];
 
-        result[0] = new Line2D.Double(points[0].getPoint2D(), points[1].getPoint2D());
-        result[1] = new Line2D.Double(points[1].getPoint2D(), points[2].getPoint2D());
-        result[2] = new Line2D.Double(points[2].getPoint2D(), points[3].getPoint2D());
-        result[3] = new Line2D.Double(points[3].getPoint2D(), points[0].getPoint2D());
+        int n = points.length;
+
+        Line2D[] result = new Line2D[n];
+
+        for (int i = 0; i < n; i++) {
+            result[i] = new Line2D.Double(points[i].getPoint2D(), points[(i + 1) % n].getPoint2D());
+        }
 
         return result;
     }
@@ -100,17 +104,17 @@ class Utils {
     }
 
     public static Tank getHitPrediction(Tank self, Tank target, boolean premium) {
-        double speed = premium ? Constants.premiumShellSpeed : Constants.regularShellSpeed;
+        double speed = premium ? Constants.PREMIUM_SHELL_SPEED : Constants.REGULAR_SHELL_SPEED;
         double distanceTraveled = self.getVirtualGunLength();
 
         double x = target.getX();
         double y = target.getY();
 
-        for (int tick = 0; tick < Constants.predictionTickTime; tick++) {
+        for (int tick = 0; tick < Constants.PREDICTION_TICK_TIME; tick++) {
             x += target.getSpeedX();
             y += target.getSpeedY();
 
-            speed *= Constants.frictionFactor;
+            speed *= Constants.FRICTION_FACTOR;
             distanceTraveled += speed;
 
             if (self.getDistanceTo(x, y) <= distanceTraveled) {
@@ -121,21 +125,82 @@ class Utils {
         return target;
     }
 
-    @Deprecated
-    public static boolean isBlocked(Tank tank, MyWorld myWorld) {
-        double x = tank.getX(), y = tank.getY();
-        x += tank.getVirtualGunLength() * Math.cos(tank.getAngle());
-        y += tank.getVirtualGunLength() * Math.sin(tank.getAngle());
+    public static boolean isInside(Unit a, Line2D[] lines) {
+        int hits = 0;
+        for (Line2D line : lines) {
+            double lastX = line.getX1();
+            double lastY = line.getY1();
+            double currentX = line.getX2();
+            double currentY = line.getY2();
 
-        if (x < 0.0 || x > myWorld.getWidth() || y < 0.0 || y > myWorld.getHeight()) {
-            return true;
-        }
-
-        for (Tank anotherTank : myWorld.getTanks()) {
-            if (tank.getId() == anotherTank.getId()) {
+            if (currentY == lastY) {
                 continue;
             }
-            if (anotherTank.getDistanceTo(x, y) < Math.min(anotherTank.getWidth(), anotherTank.getHeight())) {
+
+            double leftX;
+            if (currentX < lastX) {
+                if (a.getX() >= lastX) {
+                    continue;
+                }
+                leftX = currentX;
+            } else {
+                if (a.getX() >= currentX) {
+                    continue;
+                }
+                leftX = lastX;
+            }
+
+            double test1, test2;
+            if (currentY < lastY) {
+                if (a.getY() < currentY || a.getY() >= lastY) {
+                    continue;
+                }
+                if (a.getX() < leftX) {
+                    hits++;
+                    continue;
+                }
+                test1 = a.getX() - currentX;
+                test2 = a.getY() - currentY;
+            } else {
+                if (a.getY() < lastY || a.getY() >= currentY) {
+                    continue;
+                }
+                if (a.getX() < leftX) {
+                    hits++;
+                    continue;
+                }
+                test1 = a.getX() - lastX;
+                test2 = a.getY() - lastY;
+            }
+
+            if (test1 < (test2 / (lastY - currentY) * (lastX - currentX))) {
+                hits++;
+            }
+        }
+
+        return ((hits & 1) != 0);
+    }
+
+    // not guaranteed
+    public static boolean checkIntersection(Unit a, Unit b) {
+        Line2D[] aLines = getBoundingLines(a);
+        Line2D[] bLines = getBoundingLines(b);
+
+        for (Line2D x : aLines) {
+            for (Line2D y : bLines) {
+                if (x.intersectsLine(y)) {
+                    return true;
+                }
+            }
+        }
+
+        for (Line2D line : aLines) {
+            if (isInside(new Point(line.getX1(), line.getY1()), bLines)) {
+                return true;
+            }
+        }
+        for (Line2D line : bLines) {
+            if (isInside(new Point(line.getX1(), line.getY1()), aLines)) {
                 return true;
             }
         }
@@ -157,6 +222,10 @@ class Utils {
 
     public static Point[] getPoints(Unit unit) {
         double l = Math.hypot(unit.getWidth() / 2.0, unit.getHeight() / 2.0);
+
+        if (l == 0)
+            return new Point[]{new Point(unit.getX(), unit.getY())};
+
         double angle = Math.asin(unit.getWidth() / 2 / l);
         Point[] result = new Point[4];
         double a;

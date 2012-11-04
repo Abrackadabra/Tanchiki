@@ -38,14 +38,10 @@ public class Gunner {
     }
 
     private void findTarget() {
+        target = null;
         boolean premium = self.getPremiumShellCount() > 0;
         double max = 0.0;
-        target = null;
         for (Tank tank : world.getEnemies()) {
-            System.out.println(Math.hypot(tank.getSpeedX(), tank.getSpeedY()));
-            if (Math.hypot(tank.getSpeedX(), tank.getSpeedY()) > 3) {
-                System.out.println("DEB");
-            }
             Tank candidate = Utils.getHitPrediction(self, tank, premium);
             double score = evaluateTarget(candidate);
             if (score > max) {
@@ -60,7 +56,7 @@ public class Gunner {
         double angle = -self.getTurretRelativeAngle();
         if (target != null) {
             angle = self.getTurretAngleTo(target);
-            if (Math.abs(angle) < Constants.goodAngle) {
+            if (Math.abs(angle) < Constants.SHOOTING_ANGLE) {
                 move.setFireType(FireType.PREMIUM_PREFERRED);
             }
         }
