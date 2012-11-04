@@ -13,6 +13,10 @@ public class Point extends Unit {
         super(-1L, 0.0, 0.0, x, y, 0.0, 0.0, 0.0, 0.0);
     }
 
+    public Point(double x, double y, long id) {
+        super(id, 0.0, 0.0, x, y, 0.0, 0.0, 0.0, 0.0);
+    }
+
     public double getPriority() {
         return priority;
     }

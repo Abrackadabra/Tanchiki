@@ -2,7 +2,7 @@ import model.*;
 
 public class Gunner {
     private       Tank      self;
-    private       MyWorld   myWorld;
+    private       MyWorld   world;
     private       Move      move;
     private final Commander commander;
 
@@ -12,72 +12,62 @@ public class Gunner {
 
     public void act() {
         self = commander.getSelf();
-        myWorld = commander.getWorld();
+        world = commander.getWorld();
         move = commander.getMove();
 
-        fireAtWill(findTarget());
-        double angle;
+        findTarget();
+        fireAtWill();
+    }
+
+    private Tank target;
+
+    double evaluateTarget(Tank target) {
+        if (Utils.checkForObstaclesBetween(self, target, world)) {
+            return 0.0;
+        }
+
+        double value = 1.0;
+
+        value -= Math.abs(self.getTurretAngleTo(target)) / Math.PI * 0.4;
+
+        value -= Math.min(self.getDistanceTo(target) / world.getHeight(), 1.0) * 0.4;
+
+        value -= Math.min(world.getScoreboardPosition(target.getPlayerName()) / 3.0, 1.0) * 0.2;
+
+        return value;
+    }
+
+    private void findTarget() {
+        boolean premium = self.getPremiumShellCount() > 0;
+        double max = 0.0;
+        target = null;
+        for (Tank tank : world.getEnemies()) {
+            System.out.println(Math.hypot(tank.getSpeedX(), tank.getSpeedY()));
+            if (Math.hypot(tank.getSpeedX(), tank.getSpeedY()) > 3) {
+                System.out.println("DEB");
+            }
+            Tank candidate = Utils.getHitPrediction(self, tank, premium);
+            double score = evaluateTarget(candidate);
+            if (score > max) {
+                max = score;
+                target = candidate;
+            }
+        }
+    }
+
+    private void fireAtWill() {
+        move.setFireType(FireType.NONE);
+        double angle = -self.getTurretRelativeAngle();
         if (target != null) {
             angle = self.getTurretAngleTo(target);
-            if (Math.abs(angle) < Constants.dangerousAngle) {
+            if (Math.abs(angle) < Constants.goodAngle) {
                 move.setFireType(FireType.PREMIUM_PREFERRED);
-            } else {
-                move.setFireType(FireType.NONE);
-            }
-        } else {
-            angle = -self.getTurretRelativeAngle();
-            move.setFireType(FireType.NONE);
-        }
-        move.setTurretTurn(angle * 10.0);
-    }
-
-    private Unit target;
-
-    private Unit findTarget() {
-        target = null;
-        return null;
-        // TODO implement
-        /*
-        int n = myWorld.getEnemies().length;
-        Tank[] enemies = new Tank[n];
-        for (int i = 0; i < n; i++)
-            enemies[i] = Utils.getHitPrediction(self, myWorld.getEnemies()[i], self.getPremiumShellCount() > 0);
-
-        HashMap<Long, Integer> localID = new HashMap<Long, Integer>();
-        for (int i = 0; i < n; i++) {
-            localID.put(enemies[i].getId(), i);
-        }
-        double[] priority = new double[n];
-
-        Arrays.sort(enemies, new Utils.AbsoluteTurretAngleComparator(self));
-        for (int i = 0; i < n; i++) {
-            priority[localID.get(enemies[i].getId())] += 4 - i * 0.4;
-        }
-        Arrays.sort(enemies, new Utils.DistanceComparator(self));
-        for (int i = 0; i < n; i++) {
-            priority[localID.get(enemies[i].getId())] += 3 - i * 0.4;
-        }
-
-        for (int i = 0; i < n; i++) {
-            if (Utils.checkForObstaclesBetween(self, enemies[i], myWorld)) {
-                priority[localID.get(enemies[i].getId())] -= 6;
             }
         }
-
-        double best = -1e9;
-        for (int i = 0; i < n; i++) {
-            if (priority[localID.get(enemies[i].getId())] > best) {
-                best = priority[localID.get(enemies[i].getId())];
-                target = enemies[i];
-            }
-        }         */
+        move.setTurretTurn(angle);
     }
 
-    private void fireAtWill(Unit target) {
-
-    }
-
-    public Unit getTarget() {
+    public Tank getTarget() {
         return target;
     }
 }

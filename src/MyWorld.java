@@ -108,4 +108,33 @@ public class MyWorld {
         }
         return shellStoppers;
     }
+
+    private HashMap<String, Integer> scoreboard;
+
+    public int getScoreboardPosition(String player) {
+        if (scoreboard == null) {
+            scoreboard = new HashMap<String, Integer>();
+            ArrayList<Player> players = new ArrayList<Player>();
+            for (Player p : getPlayers()) {
+                players.add(p);
+            }
+            Collections.sort(players, new Comparator<Player>() {
+                @Override
+                public int compare(Player o1, Player o2) {
+                    if (o1.getScore() == o2.getScore()) return 0;
+                    return o1.getScore() < o2.getScore() ? 1 : -1;
+                }
+            });
+            int place = -1;
+            int prevScore = -1;
+            for (int i = 0; i < players.size(); i++) {
+                if (players.get(i).getScore() != prevScore) {
+                    prevScore = players.get(i).getScore();
+                    place = i;
+                }
+                scoreboard.put(players.get(i).getName(), place);
+            }
+        }
+        return scoreboard.get(player);
+    }
 }

@@ -13,6 +13,7 @@ class Utils {
         Line2D line = new Line2D.Double(a.getX(), a.getY(), b.getX(), b.getY());
 
         for (Unit unit : world.getShellStoppers()) {
+            if (unit.getId() == a.getId() || unit.getId() == b.getId()) continue;
             for (Line2D line2D : getBoundingLines(unit)) {
                 if (line.intersectsLine(line2D)) {
                     return true;
@@ -98,7 +99,7 @@ class Utils {
         }
     }
 
-    public static Unit getHitPrediction(Tank self, Unit target, boolean premium) {
+    public static Tank getHitPrediction(Tank self, Tank target, boolean premium) {
         double speed = premium ? Constants.premiumShellSpeed : Constants.regularShellSpeed;
         double distanceTraveled = self.getVirtualGunLength();
 
@@ -113,7 +114,7 @@ class Utils {
             distanceTraveled += speed;
 
             if (self.getDistanceTo(x, y) <= distanceTraveled) {
-                return new Point(x, y);
+                return new Tank(target.getId(), target.getPlayerName(), target.getTeammateIndex(), x, y, target.getSpeedX(), target.getSpeedY(), target.getAngle(), target.getAngularSpeed(), target.getTurretRelativeAngle(), target.getCrewHealth(), target.getHullDurability(), target.getReloadingTime(), target.getRemainingReloadingTime(), target.getPremiumShellCount(), target.isTeammate(), target.getType());
             }
         }
 
